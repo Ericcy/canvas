@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>刮刮卡</title>
+</head>
+<body>
+    <canvas id="cvs" width="200" height="100" style="border: solid 1px #ccc"></canvas>
+    <script>
+        var cvs = document.getElementById('cvs');
+        var ctx = cvs.getContext('2d');
+
+        // ctx.moveTo(10,10);
+        // ctx.lineTo(100,20)
+        // ctx.stroke()
+        // 绘制中奖信息
+        var gifs = ['apple','vivo','小米','opple','三星'];
+        var gif = gifs[Math.floor(Math.random()*gifs.length)];
+        console.log(cvs.width/2)
+        ctx.fillStyle = 'red';
+        ctx.font = '18px blod 黑体'
+        ctx.textAlign = 'center';
+        ctx.textBaseLine = 'middle';
+        ctx.fillText(gif,cvs.width/2,cvs.height/2);
+        var picUrl = cvs.toDataURL('image/png',1);
+        cvs.style.backgroundImage = 'url(' + picUrl + ')';
+
+        // 绘制遮罩
+        ctx.clearRect(0,0,cvs.width,cvs.height)
+        ctx.fillStyle = '#ccc'
+        ctx.fillRect(0,0,cvs.width,cvs.height)
+
+
+        // 
+        var flg = false
+        cvs.addEventListener('mousedown',function(e){
+            flg = true
+            ctx.globalCompositeOperation = 'destination-out'
+        })
+        cvs.addEventListener('mousemove',function(e){
+            if(flg){
+                ctx.beginPath()
+                var x = e.clientX;
+                var y = e.clientY;
+                ctx.fillRect(x,y,30,30)
+            }
+        })
+        cvs.addEventListener('mouseup',function(e){
+            flg = false
+        })
+    </script>
+</body>
+</html>
